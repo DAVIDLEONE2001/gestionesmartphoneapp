@@ -182,12 +182,98 @@ public class SmartphoneServiceImpl implements SmartphoneService {
 		try {
 
 			smartphoneDAO.setEntityManager(entityManager);
+			appDAO.setEntityManager(entityManager);
 			entityManager.getTransaction().begin();
 			smartphoneEsistente.getApps().add(appEsistente);
 			smartphoneDAO.update(smartphoneEsistente);
 			appEsistente.getSmartphones().add(smartphoneEsistente);
 			appDAO.update(appEsistente);
 			smartphoneDAO.update(smartphoneEsistente);
+			entityManager.getTransaction().commit();
+
+		} catch (Exception e) {
+
+			entityManager.getTransaction().rollback();
+			e.printStackTrace();
+			throw e;
+
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+
+	}
+
+	@Override
+	public Smartphone caricaSingoloSmartphoneConApp(Long id) throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+
+			smartphoneDAO.setEntityManager(entityManager);
+
+			return smartphoneDAO.findByIdFetchinApp(id);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			throw e;
+
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+
+	@Override
+	public void disinstallaAppSuSmartPhoneEsistente(Smartphone smartphoneEsistente, App appEsistente) throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		if (smartphoneEsistente == null || smartphoneEsistente.getId() == null || appEsistente.getId() == null
+				|| appEsistente == null) {
+
+			throw new RuntimeException("Errore con input");
+		}
+
+		try {
+
+			smartphoneDAO.setEntityManager(entityManager);
+			appDAO.setEntityManager(entityManager);
+			entityManager.getTransaction().begin();
+			smartphoneEsistente.getApps().remove(appEsistente);
+			smartphoneDAO.update(smartphoneEsistente);
+			appEsistente.getSmartphones().remove(smartphoneEsistente);
+			appDAO.update(appEsistente);
+			smartphoneDAO.update(smartphoneEsistente);
+			entityManager.getTransaction().commit();
+
+		} catch (Exception e) {
+
+			entityManager.getTransaction().rollback();
+			e.printStackTrace();
+			throw e;
+
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+
+	}
+
+	@Override
+	public void rimuoviDopoAverDisinstallatoTutto(Long id) throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		if (id == null) {
+
+			throw new RuntimeException("Errore con input");
+		}
+
+		try {
+			entityManager.getTransaction().begin();
+			smartphoneDAO.setEntityManager(entityManager);
+			appDAO.setEntityManager(entityManager);
+			Smartphone smartphoneEsistente = smartphoneDAO.get(id);
+			smartphoneEsistente.getApps().clear();
+			smartphoneDAO.update(smartphoneEsistente);
+			smartphoneDAO.delete(smartphoneEsistente);
 			entityManager.getTransaction().commit();
 
 		} catch (Exception e) {

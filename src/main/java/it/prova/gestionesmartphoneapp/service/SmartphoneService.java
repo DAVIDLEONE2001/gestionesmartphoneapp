@@ -15,4 +15,9 @@ public interface SmartphoneService extends IBaseService<Smartphone> {
 
 	public void installaAppSuSmartPhoneEsistente(Smartphone smartphoneEsistente, App appEsistente) throws Exception;
 
+	public Smartphone caricaSingoloSmartphoneConApp(Long id)throws Exception;
+	
+	public void disinstallaAppSuSmartPhoneEsistente(Smartphone smartphoneEsistente, App appEsistente) throws Exception;
+	
+	public void rimuoviDopoAverDisinstallatoTutto(Long id) throws Exception;
 }

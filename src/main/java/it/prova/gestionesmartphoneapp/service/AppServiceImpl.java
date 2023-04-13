@@ -191,4 +191,25 @@ public class AppServiceImpl implements AppService {
 		
 	}
 
+	@Override
+	public App caricaSingolaAppConSmartphones(Long id) throws Exception {
+		
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+
+			appDAO.setEntityManager(entityManager);
+
+			return appDAO.findByIdFetchingSmartphones(id);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			throw e;
+
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+
 }

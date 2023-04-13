@@ -75,4 +75,21 @@ public class AppDAOImpl implements AppDAO {
 
 	}
 
+	@Override
+	public App findByIdFetchingSmartphones(Long id) throws Exception {
+		
+		TypedQuery<App> query = entityManager
+				.createQuery("select a FROM App a left join fetch a.smartphones r where a.id = :idUtente", App.class);
+		query.setParameter("idUtente", id);
+		return query.getResultList().stream().findFirst().orElse(null);
+		
+	}
+
+	/* @Override
+	public Utente findByIdFetchingRuoli(Long id) {
+		TypedQuery<Utente> query = entityManager
+				.createQuery("select u FROM Utente u left join fetch u.ruoli r where u.id = :idUtente", Utente.class);
+		query.setParameter("idUtente", id);
+		return query.getResultList().stream().findFirst().orElse(null);
+	} */
 }

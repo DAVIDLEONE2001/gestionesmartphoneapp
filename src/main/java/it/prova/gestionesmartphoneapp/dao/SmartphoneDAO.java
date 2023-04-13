@@ -6,4 +6,6 @@ public interface SmartphoneDAO extends IBaseDAO<Smartphone> {
 
 //	public void aggiornaOS(Smartphone smartphoneEsistente, int nuovaVersione);
 
+	public Smartphone findByIdFetchinApp(Long id)throws Exception;
+	
 }
